@@ -1,0 +1,45 @@
+# Unity generated
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# Root solution files Unity generates. The dotnet harness under tools/ is kept.
+/*.csproj
+/*.sln
+/*.suo
+/*.user
+/*.userprefs
+/*.pidb
+/*.booproj
+/*.svd
+/*.pdb
+/*.mdb
+/*.opendb
+/*.VC.db
+
+# The logic-test harness restores packages next to its project.
+/tools/dotnet/bin/
+/tools/dotnet/obj/
+
+# IDE and OS
+.vs/
+.idea/
+.gradle/
+.consul/
+*.DotSettings.user
+.DS_Store
+Thumbs.db
+
+# Crash and addressables leftovers
+sysinfo.txt
+*.apk
+*.aab
+*.unitypackage
+*.app
+crashlytics-buildid.txt
