@@ -1,0 +1,198 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  checks: write
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    name: ${{ matrix.testMode }} tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        testMode: [editmode, playmode]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-EmpathyLab-${{ matrix.testMode }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-EmpathyLab-${{ matrix.testMode }}-
+            Library-EmpathyLab-
+
+      - name: Run Unity tests
+        id: tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: ${{ matrix.testMode }}-artifacts
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: ${{ matrix.testMode }} tests
+          coverageEnabled: false
+          unityVersion: auto
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test results (${{ matrix.testMode }})
+          path: ${{ steps.tests.outputs.artifactsPath }}
+
+  build:
+    name: StandaloneLinux64
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-EmpathyLab-StandaloneLinux64-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-EmpathyLab-StandaloneLinux64-
+            Library-EmpathyLab-
+
+      - name: Validate scenarios and build
+        id: build
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: StandaloneLinux64
+          buildMethod: EmpathyLab.EditorTools.BuildScript.Build
+          versioning: None
+
+      - name: Fail when the validator reports errors
+        if: always()
+        run: python3 tools/ci/check_validator.py Logs/scenario-validation.json
+
+      - name: Require the Linux player
+        run: |
+          player="$(find build/StandaloneLinux64 -maxdepth 3 -type f \( -name 'StandaloneLinux64' -o -name 'StandaloneLinux64.x86_64' -o -name 'EmpathyLabVR' -o -name 'EmpathyLabVR.x86_64' \) | head -n 1)"
+          test -n "$player"
+          echo "Player: $player"
+
+      - name: Upload player
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build-StandaloneLinux64
+          path: build/StandaloneLinux64
+
+      - name: Upload validator report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Validator report
+          path: Logs/scenario-validation.json
+
+  summary:
+    name: CI summary
+    needs: [test, build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download EditMode results
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: Test results (editmode)
+          path: test-results/editmode
+
+      - name: Download PlayMode results
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: Test results (playmode)
+          path: test-results/playmode
+
+      - name: Download validator report
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: Validator report
+          path: validator
+
+      - name: Write summary
+        run: |
+          python3 tools/ci/summarize_run.py \
+            --tests test-results \
+            --validator validator/scenario-validation.json \
+            --out ci-summary.json \
+            --history docs/data/runs.json
+
+      - name: Upload summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CI summary
+          path: ci-summary.json
+
+      - name: Upload dashboard site
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-site
+          path: docs
+
+      - name: Record this run in git
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/runs.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Record CI summary ${GITHUB_SHA}"
+          git push
+
+  dashboard:
+    name: GitHub Pages
+    needs: summary
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: dashboard-site
+          path: site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
