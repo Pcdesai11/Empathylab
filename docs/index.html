@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EmpathyLab VR — CI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <p class="eyebrow">EmpathyLab VR</p>
+    <h1>CI runs</h1>
+    <p class="lede">Pass counts, test duration, and scenario-validator warnings from GitHub Actions. The page only shows numbers a workflow wrote into <code>data/runs.json</code>.</p>
+  </header>
+  <main>
+    <section id="empty" class="panel" hidden>
+      <h2>No measured runs yet</h2>
+      <p>This file starts empty. After the first push to <code>main</code> that gets through the summary job, a row appears here with the commit SHA, test counts, test duration, and validator warnings from that run.</p>
+    </section>
+    <section id="error" class="panel error" hidden>
+      <h2>The run history could not be read</h2>
+      <p id="error-text"></p>
+    </section>
+    <section id="trends" hidden>
+      <h2>Trends</h2>
+      <div class="charts">
+        <figure>
+          <figcaption>Test duration (seconds)</figcaption>
+          <div id="duration" class="bars"></div>
+        </figure>
+        <figure>
+          <figcaption>Failed tests</figcaption>
+          <div id="failed" class="bars"></div>
+        </figure>
+        <figure>
+          <figcaption>Validator warnings</figcaption>
+          <div id="warnings" class="bars"></div>
+        </figure>
+      </div>
+    </section>
+    <section id="table-wrap" hidden>
+      <h2>Runs</h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Recorded (UTC)</th>
+              <th>Commit</th>
+              <th>Result</th>
+              <th>Passed</th>
+              <th>Failed</th>
+              <th>Skipped</th>
+              <th>Test duration (s)</th>
+              <th>Validator warnings</th>
+              <th>Validator errors</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="dashboard.js"></script>
+</body>
+</html>
