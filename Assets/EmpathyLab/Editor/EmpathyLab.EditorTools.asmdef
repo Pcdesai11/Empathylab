@@ -1,0 +1,18 @@
+{
+    "name": "EmpathyLab.EditorTools",
+    "rootNamespace": "EmpathyLab.EditorTools",
+    "references": [
+        "EmpathyLab.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
