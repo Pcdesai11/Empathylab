@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "commitSha": "6f836d1bcb5e1c937074932e17eddb5f0803cf16",
+    "recordedAtUtc": "2026-11-25T04:04:12Z",
+    "tests": null,
+    "validator": null,
+    "result": "incomplete"
+  }
+]
