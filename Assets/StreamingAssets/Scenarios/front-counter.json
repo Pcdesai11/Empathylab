@@ -1,0 +1,176 @@
+{
+  "id": "front-counter",
+  "title": "The Cake That Wasn't Ready",
+  "setting": "You are at the counter of a neighborhood bakery. Avery was told a birthday cake for their father would be ready at 4:00. It is 4:50, and guests are already at the house.",
+  "npcName": "Avery",
+  "npcRole": "Customer",
+  "initialTension": 0.72,
+  "scoreBaseline": 40,
+  "startNodeId": "arrival",
+  "nodes": [
+    {
+      "id": "arrival",
+      "speaker": "Avery",
+      "text": "I was told four o'clock. It's almost five, and people are already at my dad's house. Where is the cake?",
+      "ending": false,
+      "choices": [
+        {
+          "id": "name-the-miss",
+          "text": "You're right to be upset. We said four, and we missed it.",
+          "nextNodeId": "named",
+          "tensionDelta": -0.24,
+          "empathy": 22,
+          "clarity": 8,
+          "deescalation": 16,
+          "rationale": "You named the broken promise before you explained the kitchen. Avery can tell the impact landed."
+        },
+        {
+          "id": "defend-rush",
+          "text": "We've been slammed all afternoon. Orders run late sometimes.",
+          "nextNodeId": "defended",
+          "tensionDelta": 0.16,
+          "empathy": -14,
+          "clarity": 4,
+          "deescalation": -16,
+          "rationale": "A busy shift may be true, but it asks Avery to care about your problem before their own."
+        },
+        {
+          "id": "time-only",
+          "text": "I can have it boxed in twenty minutes.",
+          "nextNodeId": "time-only",
+          "tensionDelta": -0.04,
+          "empathy": 4,
+          "clarity": 14,
+          "deescalation": 2,
+          "rationale": "A time is useful, but you skipped the fact that guests are already waiting."
+        }
+      ]
+    },
+    {
+      "id": "named",
+      "speaker": "Avery",
+      "text": "Okay. Thank you for saying that. I need to know what I can tell them.",
+      "ending": false,
+      "choices": [
+        {
+          "id": "concrete-plan",
+          "text": "It's frosted. I'll box it, write the message, and have it in your hands in fifteen minutes.",
+          "nextNodeId": "plan",
+          "tensionDelta": -0.2,
+          "empathy": 8,
+          "clarity": 22,
+          "deescalation": 16,
+          "rationale": "A specific next step and a time they can repeat to their family lowers the uncertainty."
+        },
+        {
+          "id": "make-it-theirs",
+          "text": "You have to understand how hard today has been on us, too.",
+          "nextNodeId": "close-unresolved",
+          "tensionDelta": 0.18,
+          "empathy": -12,
+          "clarity": -4,
+          "deescalation": -14,
+          "rationale": "Turning the conversation back to your stress undoes the acknowledgment you just offered."
+        }
+      ]
+    },
+    {
+      "id": "defended",
+      "speaker": "Avery",
+      "text": "That doesn't help me. My dad thinks I forgot him.",
+      "ending": false,
+      "choices": [
+        {
+          "id": "repair",
+          "text": "You're right. That was about us, not your dad. Fifteen minutes, and I'll walk it out.",
+          "nextNodeId": "plan",
+          "tensionDelta": -0.12,
+          "empathy": 16,
+          "clarity": 18,
+          "deescalation": 18,
+          "rationale": "You repaired the brush-off and then gave a concrete plan. The order matters."
+        },
+        {
+          "id": "double-down",
+          "text": "I already told you we're busy. You'll get it when it's done.",
+          "nextNodeId": "close-unresolved",
+          "tensionDelta": 0.2,
+          "empathy": -10,
+          "clarity": -6,
+          "deescalation": -18,
+          "rationale": "A second dismissal leaves Avery with nothing they can tell the people waiting."
+        }
+      ]
+    },
+    {
+      "id": "time-only",
+      "speaker": "Avery",
+      "text": "Twenty minutes. What am I supposed to say when they ask why I don't have it?",
+      "ending": false,
+      "choices": [
+        {
+          "id": "add-the-feeling",
+          "text": "Tell them I missed the time I gave you, and that I'm sorry. Fifteen minutes, message written.",
+          "nextNodeId": "plan",
+          "tensionDelta": -0.18,
+          "empathy": 18,
+          "clarity": 16,
+          "deescalation": 14,
+          "rationale": "You went back for the feeling and still left them with a sentence they can use."
+        },
+        {
+          "id": "shrug",
+          "text": "Just say it's on the way. That's the best I can do.",
+          "nextNodeId": "close-unresolved",
+          "tensionDelta": 0.1,
+          "empathy": -6,
+          "clarity": -8,
+          "deescalation": -10,
+          "rationale": "You handed them a vague line and kept the apology for yourself."
+        }
+      ]
+    },
+    {
+      "id": "plan",
+      "speaker": "Avery",
+      "text": "Fifteen minutes. I can work with that. Please put 'Happy birthday, Dad' on the top.",
+      "ending": false,
+      "choices": [
+        {
+          "id": "confirm",
+          "text": "Happy birthday, Dad. I'll read it back to you when I bring the box out.",
+          "nextNodeId": "close-steady",
+          "tensionDelta": -0.16,
+          "empathy": 8,
+          "clarity": 12,
+          "deescalation": 10,
+          "rationale": "Repeating the message shows you heard the detail, not only the complaint."
+        },
+        {
+          "id": "rush-off",
+          "text": "Sure. I'll figure the wording out.",
+          "nextNodeId": "close-unresolved",
+          "tensionDelta": 0.08,
+          "empathy": -4,
+          "clarity": -10,
+          "deescalation": -6,
+          "rationale": "The wording is the part they still have control over. Leaving it vague keeps them on edge."
+        }
+      ]
+    },
+    {
+      "id": "close-steady",
+      "speaker": "Avery",
+      "text": "Thank you. I'll tell them I'm walking out with it.",
+      "ending": true,
+      "choices": []
+    },
+    {
+      "id": "close-unresolved",
+      "speaker": "Avery",
+      "text": "I'll wait. I'm not going to pretend this was fine.",
+      "ending": true,
+      "choices": []
+    }
+  ]
+}

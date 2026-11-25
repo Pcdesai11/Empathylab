@@ -1,0 +1,176 @@
+{
+  "id": "shared-wall",
+  "title": "The Shared Wall",
+  "setting": "You live in an apartment. Rio from next door is at your door. Their child just fell asleep, and your speaker has been carrying through the wall.",
+  "npcName": "Rio",
+  "npcRole": "Neighbor",
+  "initialTension": 0.7,
+  "scoreBaseline": 40,
+  "startNodeId": "knock",
+  "nodes": [
+    {
+      "id": "knock",
+      "speaker": "Rio",
+      "text": "It's Rio from next door. The bass is coming through the wall, and I just got my kid down. This is the third night.",
+      "ending": false,
+      "choices": [
+        {
+          "id": "kid-first",
+          "text": "I'm sorry. I didn't realize it was carrying over, and the timing is awful.",
+          "nextNodeId": "heard",
+          "tensionDelta": -0.26,
+          "empathy": 24,
+          "clarity": 8,
+          "deescalation": 18,
+          "rationale": "You named their child and the hour before you defended the volume."
+        },
+        {
+          "id": "my-evening",
+          "text": "It's not that loud. I work early, and this is the only time I have.",
+          "nextNodeId": "defensive",
+          "tensionDelta": 0.18,
+          "empathy": -12,
+          "clarity": 2,
+          "deescalation": -16,
+          "rationale": "Your schedule may be real, but it answers a sleeping child with your own constraint."
+        },
+        {
+          "id": "volume-only",
+          "text": "I'll turn it down.",
+          "nextNodeId": "volume",
+          "tensionDelta": -0.08,
+          "empathy": 6,
+          "clarity": 10,
+          "deescalation": 6,
+          "rationale": "Turning it down helps, and it still leaves out the apology they came to hear."
+        }
+      ]
+    },
+    {
+      "id": "heard",
+      "speaker": "Rio",
+      "text": "Thank you. I don't want to police your night. I need it quiet until seven in the morning.",
+      "ending": false,
+      "choices": [
+        {
+          "id": "agree-window",
+          "text": "Headphones after nine, and the speaker stays off. If it happens again, knock and I will stop.",
+          "nextNodeId": "agreement",
+          "tensionDelta": -0.2,
+          "empathy": 10,
+          "clarity": 22,
+          "deescalation": 18,
+          "rationale": "You offered a rule they can check, plus a way to tell you without another argument."
+        },
+        {
+          "id": "lecture",
+          "text": "Walls are thin in this building. Everyone has to live with some noise.",
+          "nextNodeId": "close-cold",
+          "tensionDelta": 0.16,
+          "empathy": -10,
+          "clarity": -4,
+          "deescalation": -12,
+          "rationale": "A general rule about the building dismisses the specific night they described."
+        }
+      ]
+    },
+    {
+      "id": "defensive",
+      "speaker": "Rio",
+      "text": "I'm not asking you to cancel your night. I'm asking you to let a four-year-old sleep.",
+      "ending": false,
+      "choices": [
+        {
+          "id": "own-it",
+          "text": "You're right. I made this about my schedule. Headphones after nine, starting now.",
+          "nextNodeId": "agreement",
+          "tensionDelta": -0.14,
+          "empathy": 18,
+          "clarity": 16,
+          "deescalation": 16,
+          "rationale": "You owned the deflection and replaced it with a rule that starts tonight."
+        },
+        {
+          "id": "dismiss",
+          "text": "Kids wake up. That's not on me.",
+          "nextNodeId": "close-cold",
+          "tensionDelta": 0.22,
+          "empathy": -14,
+          "clarity": -8,
+          "deescalation": -18,
+          "rationale": "You refused the effect of the noise, so there is nothing left to negotiate."
+        }
+      ]
+    },
+    {
+      "id": "volume",
+      "speaker": "Rio",
+      "text": "Down is a start. I need to know it stays down after I go back upstairs.",
+      "ending": false,
+      "choices": [
+        {
+          "id": "make-a-rule",
+          "text": "It stays down. Headphones after nine. If you hear it, knock once and I will stop.",
+          "nextNodeId": "agreement",
+          "tensionDelta": -0.16,
+          "empathy": 12,
+          "clarity": 20,
+          "deescalation": 14,
+          "rationale": "You turned a one-time gesture into a rule they can rely on after they leave the door."
+        },
+        {
+          "id": "vague",
+          "text": "I'll try to keep it reasonable.",
+          "nextNodeId": "close-cold",
+          "tensionDelta": 0.06,
+          "empathy": -4,
+          "clarity": -10,
+          "deescalation": -8,
+          "rationale": "Reasonable means something different to each of you, so the worry stays."
+        }
+      ]
+    },
+    {
+      "id": "agreement",
+      "speaker": "Rio",
+      "text": "Okay. Headphones after nine is fair. Thank you for being specific.",
+      "ending": false,
+      "choices": [
+        {
+          "id": "confirm",
+          "text": "Headphones after nine, speaker off. I'll shut it off before you go back up.",
+          "nextNodeId": "close-steady",
+          "tensionDelta": -0.14,
+          "empathy": 8,
+          "clarity": 12,
+          "deescalation": 10,
+          "rationale": "Repeating the agreement shows you are committing to the same plan they heard."
+        },
+        {
+          "id": "backtrack",
+          "text": "Most nights. I can't promise every time.",
+          "nextNodeId": "close-cold",
+          "tensionDelta": 0.12,
+          "empathy": -6,
+          "clarity": -8,
+          "deescalation": -12,
+          "rationale": "Taking the promise back at the last step puts them back where they started."
+        }
+      ]
+    },
+    {
+      "id": "close-steady",
+      "speaker": "Rio",
+      "text": "That's all I wanted. Have a good night.",
+      "ending": true,
+      "choices": []
+    },
+    {
+      "id": "close-cold",
+      "speaker": "Rio",
+      "text": "Then we'll be doing this again. I'm going back up.",
+      "ending": true,
+      "choices": []
+    }
+  ]
+}
